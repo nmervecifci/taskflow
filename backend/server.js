@@ -6,6 +6,11 @@ require("dotenv").config();
 const cookieParser = require("cookie-parser");
 
 const app = express();
+
+app.get("/", (req, res) => {
+  res.json({ status: "OK", message: "API root is working" });
+});
+
 app.use(cookieParser());
 // Connect to database
 connectDB();
