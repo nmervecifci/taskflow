@@ -5,11 +5,17 @@ const authenticated = async (req, res, next) => {
   try {
     let token;
 
+    // Bearer Token varsa al
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer")
     ) {
       token = req.headers.authorization.split(" ")[1];
+    }
+
+    // Cookie'den token alma (eğer Bearer yoksa)
+    if (!token && req.cookies && req.cookies.token) {
+      token = req.cookies.token;
     }
 
     if (!token) {
@@ -29,7 +35,7 @@ const authenticated = async (req, res, next) => {
 
     req.user = {
       _id: user._id,
-      id: user._id.toString(), // Hem _id hem id için uyumluluk
+      id: user._id.toString(),
       username: user.username,
       email: user.email,
       role: user.role,

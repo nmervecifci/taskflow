@@ -3,9 +3,10 @@ const cors = require("cors");
 const helmet = require("helmet");
 const connectDB = require("./config/database");
 require("dotenv").config();
+const cookieParser = require("cookie-parser");
 
 const app = express();
-
+app.use(cookieParser());
 // Connect to database
 connectDB();
 
