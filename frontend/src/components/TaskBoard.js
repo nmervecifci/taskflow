@@ -14,21 +14,17 @@ export default function TaskBoard({ projectId }) {
   const { tasks, createLoading, updateLoading, deleteLoading, error } =
     useSelector((state) => state.tasks);
 
-
   const [showCreateTask, setShowCreateTask] = useState(false);
   const [showEditTask, setShowEditTask] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
 
- 
   const [searchTerm, setSearchTerm] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [assigneeFilter, setAssigneeFilter] = useState("all");
 
- 
   const [draggedTask, setDraggedTask] = useState(null);
   const [dragOverColumn, setDragOverColumn] = useState(null);
 
- 
   const [newTask, setNewTask] = useState({
     title: "",
     description: "",
@@ -39,29 +35,31 @@ export default function TaskBoard({ projectId }) {
     estimatedHours: "",
   });
 
-
   const [users, setUsers] = useState([]);
-
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-       
-        let response = await fetch("process.env.NEXT_PUBLIC_API_URL/api/users/simple", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-        });
-
-     
-        if (!response.ok && response.status === 404) {
-          response = await fetch("process.env.NEXT_PUBLIC_API_URL/api/users", {
+        let response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/users/simple`,
+          {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
               "Content-Type": "application/json",
             },
-          });
+          }
+        );
+
+        if (!response.ok && response.status === 404) {
+          response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/users`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
         }
 
         if (response.ok) {
@@ -70,7 +68,6 @@ export default function TaskBoard({ projectId }) {
           setUsers(data.data || []);
         } else {
           console.log("Users API failed, using fallback");
-         
           setUsers([
             {
               _id: "507f1f77bcf86cd799439011",
@@ -115,7 +112,6 @@ export default function TaskBoard({ projectId }) {
     fetchUsers();
   }, []);
 
-
   const filteredTasks = tasks.filter((task) => {
     const matchesSearch =
       task.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -158,7 +154,6 @@ export default function TaskBoard({ projectId }) {
     },
   ];
 
-
   const handleCreateTask = async (e) => {
     e.preventDefault();
     try {
@@ -166,7 +161,7 @@ export default function TaskBoard({ projectId }) {
         title: newTask.title,
         description: newTask.description,
         priority: newTask.priority,
-        status: newTask.status, 
+        status: newTask.status,
         dueDate: newTask.dueDate || null,
         estimatedHours: newTask.estimatedHours
           ? parseFloat(newTask.estimatedHours)
@@ -193,7 +188,6 @@ export default function TaskBoard({ projectId }) {
     }
   };
 
-
   const handleEditTask = async (e) => {
     e.preventDefault();
     try {
@@ -206,7 +200,6 @@ export default function TaskBoard({ projectId }) {
         assignedTo: newTask.assignedTo || null,
       };
 
-    
       if (taskData.assignedTo && taskData.assignedTo.length !== 24) {
         console.warn("Invalid ObjectId format, setting assignedTo to null");
         taskData.assignedTo = null;
@@ -231,7 +224,6 @@ export default function TaskBoard({ projectId }) {
     }
   };
 
-
   const resetTaskForm = () => {
     setNewTask({
       title: "",
@@ -243,7 +235,6 @@ export default function TaskBoard({ projectId }) {
       estimatedHours: "",
     });
   };
-
 
   const openEditModal = (task) => {
     setEditingTask(task);
@@ -820,5 +811,3 @@ export default function TaskBoard({ projectId }) {
     </div>
   );
 }
-
-

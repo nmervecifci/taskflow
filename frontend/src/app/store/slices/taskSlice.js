@@ -7,7 +7,7 @@ export const fetchTasks = createAsyncThunk(
   async (projectId, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `process.env.NEXT_PUBLIC_API_URL/api/tasks/project/${projectId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/tasks/project/${projectId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -32,17 +32,20 @@ export const createTask = createAsyncThunk(
   "tasks/createTask",
   async ({ projectId, taskData }, { rejectWithValue }) => {
     try {
-      const response = await fetch("process.env.NEXT_PUBLIC_API_URL/api/tasks", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...taskData,
-          project: projectId,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/tasks`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...taskData,
+            project: projectId,
+          }),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -62,7 +65,7 @@ export const updateTaskStatus = createAsyncThunk(
   async ({ taskId, status }, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `process.env.NEXT_PUBLIC_API_URL/api/tasks/${taskId}/status`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/tasks/${taskId}/status`,
         {
           method: "PATCH",
           headers: {
@@ -91,7 +94,7 @@ export const updateTask = createAsyncThunk(
   async ({ taskId, taskData }, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `process.env.NEXT_PUBLIC_API_URL/api/tasks/${taskId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/tasks/${taskId}`,
         {
           method: "PUT",
           headers: {
@@ -120,7 +123,7 @@ export const deleteTask = createAsyncThunk(
   async (taskId, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `process.env.NEXT_PUBLIC_API_URL/api/tasks/${taskId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/tasks/${taskId}`,
         {
           method: "DELETE",
           headers: {
@@ -246,5 +249,3 @@ const taskSlice = createSlice({
 
 export const { clearError, clearTasks } = taskSlice.actions;
 export default taskSlice.reducer;
-
-

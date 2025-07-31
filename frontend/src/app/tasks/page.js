@@ -53,12 +53,15 @@ export default function TasksPage() {
       console.log("🔑 Token exists:", !!token);
 
       // Gerçek API çağrısı
-      const response = await fetch("process.env.NEXT_PUBLIC_API_URL/api/tasks", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/tasks`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       console.log("📡 API Response status:", response.status);
 
@@ -670,5 +673,3 @@ export default function TasksPage() {
     </DashboardLayout>
   );
 }
-
-
