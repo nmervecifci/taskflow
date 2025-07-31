@@ -1,7 +1,9 @@
 // services/api.js
 import axios from "axios";
 
-const API_URL = "https://taskflow-x9rq.onrender.com"; // Geçici test
+const API_URL = "https://taskflow-x9rq.onrender.com/api";
+
+console.log("🔍 API_URL:", API_URL); // Debug için
 
 // Axios instance oluştur
 const apiClient = axios.create({
