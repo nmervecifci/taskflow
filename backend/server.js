@@ -11,9 +11,23 @@ connectDB();
 
 // Security Middleware
 app.use(helmet());
+
+// 🔁 CORS Ayarı: Vercel + localhost izinli
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://taskflow-18j9ie86x-merve-nur-cifcis-projects.vercel.app",
+];
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("CORS hatası: Yetkisiz origin -> " + origin));
+      }
+    },
     credentials: true,
   })
 );
@@ -28,12 +42,13 @@ app.use((req, res, next) => {
   next();
 });
 
+// Routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/projects", require("./routes/projects"));
-
 app.use("/api/tasks", require("./routes/tasks"));
 app.use("/api/users", require("./routes/users"));
 
+// Health check
 app.get("/api/health", (req, res) => {
   res.json({
     status: "OK",
@@ -48,6 +63,7 @@ app.get("/api/health", (req, res) => {
   });
 });
 
+// Error handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(err.status || 500).json({
@@ -57,6 +73,7 @@ app.use((err, req, res, next) => {
   });
 });
 
+// 404 handler
 app.use("*", (req, res) => {
   res.status(404).json({
     success: false,
@@ -65,8 +82,8 @@ app.use("*", (req, res) => {
   });
 });
 
+// Start server
 const PORT = process.env.PORT || 5001;
-
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📡 API available at http://localhost:${PORT}/api`);
