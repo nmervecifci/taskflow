@@ -20,3 +20,5 @@ export default function RoleBasedComponent({
   // Yetkisi varsa children'ı göster, yoksa fallback'i
   return hasPermission ? children : fallback;
 }
+
+

@@ -47,7 +47,7 @@ export default function TaskBoard({ projectId }) {
     const fetchUsers = async () => {
       try {
        
-        let response = await fetch("http://localhost:5001/api/users/simple", {
+        let response = await fetch("process.env.NEXT_PUBLIC_API_URL/api/users/simple", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "application/json",
@@ -56,7 +56,7 @@ export default function TaskBoard({ projectId }) {
 
      
         if (!response.ok && response.status === 404) {
-          response = await fetch("http://localhost:5001/api/users", {
+          response = await fetch("process.env.NEXT_PUBLIC_API_URL/api/users", {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
               "Content-Type": "application/json",
@@ -820,3 +820,5 @@ export default function TaskBoard({ projectId }) {
     </div>
   );
 }
+
+

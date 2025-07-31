@@ -56,7 +56,7 @@ export default function ProjectsPage() {
     ) {
       try {
         const response = await fetch(
-          `http://localhost:5001/api/projects/${project._id}`,
+          `process.env.NEXT_PUBLIC_API_URL/api/projects/${project._id}`,
           {
             method: "DELETE",
             headers: {
@@ -446,3 +446,5 @@ export default function ProjectsPage() {
     </DashboardLayout>
   );
 }
+
+
