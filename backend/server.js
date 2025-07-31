@@ -13,7 +13,7 @@ connectDB();
 // 🔁 CORS Ayarı: En başta olmalı!
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://taskflow-4.onrender.com",
+  "https://taskflow-1-sh8r.onrender.com",
 ];
 
 app.use(
