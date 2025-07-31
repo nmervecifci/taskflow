@@ -77,7 +77,7 @@ export default function LandingPage() {
         <div className="text-center max-w-4xl mx-auto">
           <div className="inline-flex items-center bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
             <Star className="h-4 w-4 mr-2" />
-            Türkiye'nin #1 Proje Yönetim Platformu
+            Türkiyenin #1 Proje Yönetim Platformu
           </div>
 
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
@@ -167,7 +167,7 @@ export default function LandingPage() {
               Haydi, İlk Projenizi Oluşturun!
             </h2>
             <p className="text-xl text-blue-100 mb-8">
-              Binlerce takım TaskFlow'u kullanarak projelerini başarıyla
+              Binlerce takım TaskFlowu kullanarak projelerini başarıyla
               tamamlıyor. Siz de aramıza katılın!
             </p>
             <Link
