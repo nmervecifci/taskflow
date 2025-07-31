@@ -21,7 +21,8 @@ app.use(helmet());
 // 🔁 CORS Ayarı: Vercel + localhost izinli
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://taskflow-18j9ie86x-merve-nur-cifcis-projects.vercel.app",
+  "https://taskflow-five-omega.vercel.app", // ✅ kalıcı frontend domain
+  "https://taskflow-5jh2cy8b2-merve-nur-cifcis-projects.vercel.app", // 🧪 geçici preview (isteğe bağlı)
 ];
 
 app.use(
