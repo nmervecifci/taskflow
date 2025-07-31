@@ -1,7 +1,7 @@
 // services/api.js
 import axios from "axios";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = "https://taskflow-x9rq.onrender.com"; // Geçici test
 
 // Axios instance oluştur
 const apiClient = axios.create({
