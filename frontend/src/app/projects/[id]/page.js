@@ -18,7 +18,7 @@ import {
   Shield,
 } from "lucide-react";
 // TEST COMMENT FOR GIT
-import apiClient from "@/services/apiClient";
+import apiClient from "@/services/api";
 
 export default function ProjectDetailPage() {
   const params = useParams();
