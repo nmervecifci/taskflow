@@ -24,17 +24,28 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("🚀 LOGIN ATTEMPT:", formData);
 
     try {
       const result = await dispatch(loginUser(formData));
+      console.log("🔍 LOGIN RESULT:", result);
+      console.log("🔍 RESULT TYPE:", result.type);
+      console.log("🔍 RESULT PAYLOAD:", result.payload);
+
+      // localStorage kontrol
+      console.log("🔍 TOKEN AFTER LOGIN:", localStorage.getItem("token"));
+      console.log("🔍 USER AFTER LOGIN:", localStorage.getItem("user"));
+
       if (result.type === "auth/loginUser/fulfilled") {
+        console.log("✅ Login success, redirecting...");
         router.replace("/dashboard");
+      } else {
+        console.log("❌ Login failed:", result.payload);
       }
     } catch (error) {
       console.error("Login error:", error);
     }
   };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4">
       <div className="max-w-md w-full space-y-8">
@@ -143,5 +154,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-
