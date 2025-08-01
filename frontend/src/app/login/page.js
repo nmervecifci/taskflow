@@ -27,7 +27,7 @@ export default function LoginPage() {
 
     try {
       const result = await dispatch(loginUser(formData));
-      if (result.type === "auth/login/fulfilled") {
+      if (result.type === "auth/loginUser/fulfilled") {
         router.replace("/dashboard");
       }
     } catch (error) {
