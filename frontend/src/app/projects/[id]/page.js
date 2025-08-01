@@ -17,7 +17,7 @@ import {
   Crown,
   Shield,
 } from "lucide-react";
-import apiClient from "@/services/api";
+import apiClient from "@/services/apiClient";
 
 export default function ProjectDetailPage() {
   const params = useParams();
@@ -95,8 +95,8 @@ export default function ProjectDetailPage() {
         return;
       }
 
-      // API'den al
-      const response = await api.get("/auth/me");
+      // apiClient'den al
+      const response = await apiClient.get("/auth/me");
       setCurrentUser(response.data.data || response.data);
     } catch (error) {
       console.error("Kullanıcı bilgileri alınamadı:", error);
@@ -122,8 +122,8 @@ export default function ProjectDetailPage() {
         return;
       }
 
-      // Mevcut API client'ı kullan - token otomatik eklenir
-      const response = await api.get(`/projects/${params.id}`);
+      // Mevcut apiClient client'ı kullan - token otomatik eklenir
+      const response = await apiClient.get(`/projects/${params.id}`);
       setProject(response.data.data || response.data);
     } catch (error) {
       if (error.response?.status === 401) {
@@ -146,7 +146,7 @@ export default function ProjectDetailPage() {
       }
 
       console.log("Görevler getiriliyor, proje ID:", params.id);
-      const response = await api.get(`/projects/${params.id}/tasks`);
+      const response = await apiClient.get(`/projects/${params.id}/tasks`);
       const tasks = response.data.data || response.data;
 
       console.log("Backend'den gelen görevler:", tasks);
@@ -184,7 +184,7 @@ export default function ProjectDetailPage() {
         setTasks([]); // Boş liste göster
       } else {
         console.error(
-          "Bilinmeyen API Hatası:",
+          "Bilinmeyen apiClient Hatası:",
           error.response?.data || error.message
         );
         setTasks([]); // Boş liste göster
@@ -247,9 +247,12 @@ export default function ProjectDetailPage() {
     try {
       const statusInEnglish = reverseTranslateStatus(newStatus);
 
-      const response = await api.put(`/projects/${projectId}/tasks/${taskId}`, {
-        status: statusInEnglish,
-      });
+      const response = await apiClient.put(
+        `/projects/${projectId}/tasks/${taskId}`,
+        {
+          status: statusInEnglish,
+        }
+      );
 
       return response.data;
     } catch (error) {
@@ -319,7 +322,7 @@ export default function ProjectDetailPage() {
       console.log("currentUser:", currentUser);
       console.log("Backend'e gönderilen data:", taskPayload);
 
-      const response = await api.post(
+      const response = await apiClient.post(
         `/projects/${projectId}/tasks`,
         taskPayload
       );
@@ -840,7 +843,7 @@ function TaskCreateModal({ projectId, onClose, onTaskCreated, currentUser }) {
 
   const fetchProjectMembers = async () => {
     try {
-      const response = await api.get(`/projects/${projectId}/members`);
+      const response = await apiClient.get(`/projects/${projectId}/members`);
       const data = response.data.data || response.data;
 
       // Owner ve members'ı birleştir
