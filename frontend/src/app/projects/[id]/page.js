@@ -17,6 +17,7 @@ import {
   Crown,
   Shield,
 } from "lucide-react";
+// TEST COMMENT FOR GIT
 import apiClient from "@/services/apiClient";
 
 export default function ProjectDetailPage() {
