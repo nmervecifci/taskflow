@@ -1,16 +1,7 @@
 # 🚀 TaskFlow - Modern Proje Yönetim Sistemi
 
-[![Deploy Status](https://img.shields.io/badge/deploy-success-brightgreen)](https://taskflow-management.vercel.app)
-[![Next.js](https://img.shields.io/badge/Next.js-14.0-black)](https://nextjs.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-green)](https://nodejs.org/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green)](https://mongodb.com/)
-[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-
 > **Rol tabanlı yetkilendirme sistemi ile modern proje ve görev yönetimi platformu**
 
-## 🌐 Canlı Demo
-
-**🔗 Live URL:** [https://taskflow-management.vercel.app](https://taskflow-management.vercel.app)
 
 **📂 GitHub Repository:** [https://github.com/nmervecifci/taskflow](https://github.com/nmervecifci/taskflow)
 
@@ -279,6 +270,13 @@ git push origin main  # Otomatik deploy
 | **Bundle Size** | < 250KB | < 300KB |
 
 ---
+
+## 🛠️ Kurulum
+
+```bash
+git clone https://github.com/nmervecifci/taskflow.git
+cd taskflow
+npm install
 
 ## 🤝 Katkıda Bulunma
 
