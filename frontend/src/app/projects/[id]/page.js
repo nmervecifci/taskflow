@@ -1138,7 +1138,7 @@ function TaskCard({
       {canMove && (
         <div className="mt-2 pt-2 border-t border-gray-100">
           <div className="flex items-center text-xs text-gray-400">
-            <span>✋ Sürükleyerek taşıyabilirsiniz</span>
+            <span>Sürükleyerek taşıyabilirsiniz</span>
           </div>
         </div>
       )}
