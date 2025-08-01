@@ -1,29 +1,25 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { tasksAPI, projectsAPI } from "@/services/api";
+import apiClient from "@/services/api";
 
 // Async thunks
 export const fetchTasks = createAsyncThunk(
   "tasks/fetchTasks",
   async (projectId, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/tasks/project/${projectId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      console.log("Fetching tasks for project:", projectId);
+      const response = await apiClient.get(`/projects/${projectId}/tasks`);
+      console.log("Tasks response:", response.data);
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      return data.data || [];
+      const tasks =
+        response.data.data || response.data.tasks || response.data || [];
+      return Array.isArray(tasks) ? tasks : [];
     } catch (error) {
-      return rejectWithValue(error.message);
+      console.error("Fetch tasks error:", error);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Görevler yüklenemedi";
+      return rejectWithValue(message);
     }
   }
 );
@@ -32,30 +28,22 @@ export const createTask = createAsyncThunk(
   "tasks/createTask",
   async ({ projectId, taskData }, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/tasks`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...taskData,
-            project: projectId,
-          }),
-        }
-      );
+      console.log("Creating task:", { projectId, taskData });
+      const response = await apiClient.post(`/projects/${projectId}/tasks`, {
+        ...taskData,
+        project: projectId,
+      });
+      console.log("Create task response:", response.data);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Task creation failed");
-      }
-
-      const data = await response.json();
-      return data.data;
+      const newTask = response.data.data || response.data.task || response.data;
+      return newTask;
     } catch (error) {
-      return rejectWithValue(error.message);
+      console.error("Create task error:", error);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Görev oluşturulamadı";
+      return rejectWithValue(message);
     }
   }
 );
@@ -64,27 +52,20 @@ export const updateTaskStatus = createAsyncThunk(
   "tasks/updateTaskStatus",
   async ({ taskId, status }, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/tasks/${taskId}/status`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ status }),
-        }
-      );
+      console.log("Updating task status:", { taskId, status });
+      const response = await apiClient.put(`/tasks/${taskId}`, { status });
+      console.log("Update task status response:", response.data);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Status update failed");
-      }
-
-      const data = await response.json();
-      return data.data;
+      const updatedTask =
+        response.data.data || response.data.task || response.data;
+      return updatedTask;
     } catch (error) {
-      return rejectWithValue(error.message);
+      console.error("Update task status error:", error);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Görev durumu güncellenemedi";
+      return rejectWithValue(message);
     }
   }
 );
@@ -93,27 +74,20 @@ export const updateTask = createAsyncThunk(
   "tasks/updateTask",
   async ({ taskId, taskData }, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/tasks/${taskId}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(taskData),
-        }
-      );
+      console.log("Updating task:", { taskId, taskData });
+      const response = await apiClient.put(`/tasks/${taskId}`, taskData);
+      console.log("Update task response:", response.data);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Task update failed");
-      }
-
-      const data = await response.json();
-      return data.data;
+      const updatedTask =
+        response.data.data || response.data.task || response.data;
+      return updatedTask;
     } catch (error) {
-      return rejectWithValue(error.message);
+      console.error("Update task error:", error);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Görev güncellenemedi";
+      return rejectWithValue(message);
     }
   }
 );
@@ -122,45 +96,53 @@ export const deleteTask = createAsyncThunk(
   "tasks/deleteTask",
   async (taskId, { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/tasks/${taskId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Task deletion failed");
-      }
-
+      console.log("Deleting task:", taskId);
+      await apiClient.delete(`/tasks/${taskId}`);
+      console.log("Task deleted successfully");
       return taskId;
     } catch (error) {
-      return rejectWithValue(error.message);
+      console.error("Delete task error:", error);
+      const message =
+        error.response?.data?.message || error.message || "Görev silinemedi";
+      return rejectWithValue(message);
     }
   }
 );
 
+const initialState = {
+  tasks: [],
+  isLoading: false,
+  createLoading: false,
+  updateLoading: false,
+  deleteLoading: false,
+  error: null,
+  lastFetch: null,
+};
+
 const taskSlice = createSlice({
   name: "tasks",
-  initialState: {
-    tasks: [],
-    isLoading: false,
-    createLoading: false,
-    updateLoading: false,
-    deleteLoading: false,
-    error: null,
-  },
+  initialState,
   reducers: {
     clearError: (state) => {
       state.error = null;
     },
     clearTasks: (state) => {
       state.tasks = [];
+    },
+    // Optimistic updates
+    addTaskOptimistic: (state, action) => {
+      state.tasks.push(action.payload);
+    },
+    updateTaskOptimistic: (state, action) => {
+      const index = state.tasks.findIndex(
+        (task) => task._id === action.payload._id
+      );
+      if (index !== -1) {
+        state.tasks[index] = { ...state.tasks[index], ...action.payload };
+      }
+    },
+    removeTaskOptimistic: (state, action) => {
+      state.tasks = state.tasks.filter((task) => task._id !== action.payload);
     },
   },
   extraReducers: (builder) => {
@@ -173,10 +155,13 @@ const taskSlice = createSlice({
       .addCase(fetchTasks.fulfilled, (state, action) => {
         state.isLoading = false;
         state.tasks = action.payload;
+        state.error = null;
+        state.lastFetch = new Date().toISOString();
       })
       .addCase(fetchTasks.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+        console.error("Fetch tasks rejected:", action.payload);
       })
 
       // Create Task
@@ -187,10 +172,12 @@ const taskSlice = createSlice({
       .addCase(createTask.fulfilled, (state, action) => {
         state.createLoading = false;
         state.tasks.push(action.payload);
+        state.error = null;
       })
       .addCase(createTask.rejected, (state, action) => {
         state.createLoading = false;
         state.error = action.payload;
+        console.error("Create task rejected:", action.payload);
       })
 
       // Update Task
@@ -206,10 +193,12 @@ const taskSlice = createSlice({
         if (index !== -1) {
           state.tasks[index] = action.payload;
         }
+        state.error = null;
       })
       .addCase(updateTask.rejected, (state, action) => {
         state.updateLoading = false;
         state.error = action.payload;
+        console.error("Update task rejected:", action.payload);
       })
 
       // Update Task Status
@@ -225,10 +214,12 @@ const taskSlice = createSlice({
         if (index !== -1) {
           state.tasks[index] = action.payload;
         }
+        state.error = null;
       })
       .addCase(updateTaskStatus.rejected, (state, action) => {
         state.updateLoading = false;
         state.error = action.payload;
+        console.error("Update task status rejected:", action.payload);
       })
 
       // Delete Task
@@ -239,13 +230,22 @@ const taskSlice = createSlice({
       .addCase(deleteTask.fulfilled, (state, action) => {
         state.deleteLoading = false;
         state.tasks = state.tasks.filter((task) => task._id !== action.payload);
+        state.error = null;
       })
       .addCase(deleteTask.rejected, (state, action) => {
         state.deleteLoading = false;
         state.error = action.payload;
+        console.error("Delete task rejected:", action.payload);
       });
   },
 });
 
-export const { clearError, clearTasks } = taskSlice.actions;
+export const {
+  clearError,
+  clearTasks,
+  addTaskOptimistic,
+  updateTaskOptimistic,
+  removeTaskOptimistic,
+} = taskSlice.actions;
+
 export default taskSlice.reducer;

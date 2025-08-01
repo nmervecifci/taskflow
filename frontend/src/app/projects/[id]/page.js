@@ -17,7 +17,7 @@ import {
   Crown,
   Shield,
 } from "lucide-react";
-import api from "@/services/api";
+import apiClient from "@/services/api";
 
 export default function ProjectDetailPage() {
   const params = useParams();
